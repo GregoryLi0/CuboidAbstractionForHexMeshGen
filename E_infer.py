@@ -88,6 +88,7 @@ def infer(args, cur_dataloader, Network, hypara, train_val_test, batch_size, col
 
 
 if __name__ == "__main__":
+    ## python E_infer.py --E_shapenet4096 ShapeNetNormal4096 --E_ckpt_path PretrainModels\airplane --checkpoint airplane.pth
     parser = argparse.ArgumentParser()
     parser.add_argument ('--E_CUDA', default = 0, type = int, help = 'Index of CUDA')
     parser.add_argument ('--infer_train', default = True, type = bool, help = 'If infer training set')
