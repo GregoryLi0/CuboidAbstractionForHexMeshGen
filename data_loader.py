@@ -29,3 +29,36 @@ class shapenet4096(data.Dataset):
     def __len__(self):
         return self.data_list.shape[0]
 
+class loadnp(data.Dataset):
+    def __init__(self, data_dir):
+        super().__init__()
+        self.data_list_file = data_dir
+        self.data_list = np.load(self.data_list_file)
+        print(type(self.data_list))
+
+class loadobj(data.Dataset):
+    def __init__(self, data_dir):
+        super().__init__()
+        self.data_list_file = data_dir
+        data_d=list()
+        v_num = 0
+        vn_num = 0
+        file_object = open(self.data_list_file, 'r')
+        lines = file_object.readlines()
+        for line in lines:
+            if line:
+                line = line.rstrip('\n')
+                strs = line.split(' ')
+                if strs[0] == 'v':
+                    v_d = [float(strs[1]),float(strs[2]),float(strs[3]),0,0,0]
+                    print(v_d)
+                    data_d.append(v_d)
+                    v_num+=1
+
+                if strs[0] == 'vn' and vn_num <v_num:
+                    data_d[vn_num][3]=float(strs[1])
+                    data_d[vn_num][4]=float(strs[2])
+                    data_d[vn_num][5]=float(strs[3])
+                    vn_num+=1
+        print(data_d)
+        print(type(data_d))
