@@ -125,8 +125,13 @@ def readObjToNPArray(data_dir):
 # data = np.load("7474096.npy")
 # print(data)
 
-data = np.load("D:/files/codes/Python/CuboidAbstractionViaSegdatas/ShapeNetNormal4096/airplane/74797de431f83991bc0909d98a1ff2b4.npy")
-np.savetxt("747ttt.xyz",data,fmt="%s")
+data = np.loadtxt("aircraft001oriented.xyz")
+np.save("7474096.npy",data)
+# data = np.load("74797de431f83991bc0909d98a1ff2b4.npy")
+# np.savetxt("out.xyz",data)
+
+#data = np.load("D:/files/codes/Python/CuboidAbstractionViaSegdatas/ShapeNetNormal4096/airplane/74797de431f83991bc0909d98a1ff2b4.npy")
+#np.savetxt("747ttt.xyz",data,fmt="%s")
 # data=data[:,3:6]
 # print(data)
 # print(data.max())

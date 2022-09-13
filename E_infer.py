@@ -47,22 +47,29 @@ def main(args):
     hypara['E']['E_shapenet4096'] = args.E_shapenet4096
 
     # Create Dataset
-    batch_size = 32
+    batch_size = 16
     if args.infer_test:
         cur_dataset = shapenet4096('test', hypara['E']['E_shapenet4096'], hypara['D']['D_datatype'], True)
-        cur_dataloader = DataLoader(cur_dataset, 
+        print("cur_dataset")
+        print(type(cur_dataset))
+        cur_dataloader = DataLoader(cur_dataset,
                                     batch_size = batch_size,
                                     shuffle=False, 
                                     num_workers=4, 
                                     pin_memory=True)
         infer(args, cur_dataloader, Network, hypara, 'test',batch_size, color)
     if args.infer_train:
+        print("train")
         cur_dataset = shapenet4096('train', hypara['E']['E_shapenet4096'], hypara['D']['D_datatype'], True)
-        cur_dataloader = DataLoader(cur_dataset, 
+
+        cur_dataloader = DataLoader(cur_dataset,
                                     batch_size = batch_size,
                                     shuffle=False, 
                                     num_workers=4, 
                                     pin_memory=True)
+
+        print("cur_dataloader")
+        print(type(cur_dataloader))
         infer(args, cur_dataloader, Network, hypara, 'train', batch_size, color)
 
 
@@ -74,6 +81,12 @@ def infer(args, cur_dataloader, Network, hypara, train_val_test, batch_size, col
         with torch.no_grad():
             points, normals, _, _, names = data
             points, normals = points.cuda(), normals.cuda()
+            print("points")
+            print(points.size())
+            print(type(points))
+            print("normals")
+            print(normals.size())
+            print(type(normals))
             outdict = Network(pc = points)
 
             vertices, faces = utils_pt.generate_cube_mesh_batch(outdict['verts_forward'], outdict['cube_face'], batch_size)
@@ -88,11 +101,11 @@ def infer(args, cur_dataloader, Network, hypara, train_val_test, batch_size, col
 
 
 if __name__ == "__main__":
-    ## python E_infer.py --E_shapenet4096 ShapeNetNormal4096 --E_ckpt_path PretrainModels\airplane --checkpoint airplane.pth
+    ## python E_infer.py --E_shapenet4096 ../CuboidAbstractionViaSegdatas/ShapeNetNormal4096/ --E_ckpt_path ../CuboidAbstractionViaSegdatas/PretrainModels/airplane/ --checkpoint airplane.pth
     parser = argparse.ArgumentParser()
     parser.add_argument ('--E_CUDA', default = 0, type = int, help = 'Index of CUDA')
     parser.add_argument ('--infer_train', default = True, type = bool, help = 'If infer training set')
-    parser.add_argument ('--infer_test', default = True, type = bool, help = 'If infer test set')
+    parser.add_argument ('--infer_test', default = False, type = bool, help = 'If infer test set')
     
     parser.add_argument ('--E_shapenet4096', default = '', type = str, help = 'Path to ShapeNet4096 dataset')
     parser.add_argument ('--E_ckpt_path', default = '', type = str, help = 'Experiment checkpoint path')
